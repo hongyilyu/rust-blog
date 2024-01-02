@@ -1,0 +1,17 @@
+{
+  "name": "rust-blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build":"npx tailwindcss -i ./style/tailwind.css -o ./style/output/output.css",
+    "watch":"npx tailwindcss -i ./style/tailwind.css -o ./style/output/output.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "@tailwindcss/typography": "^0.5.10",
+    "preline": "^1.9.0",
+    "tailwindcss": "^3.3.5"
+  }
+}
