@@ -42,7 +42,6 @@ pub fn Footer() -> impl IntoView {
 
     view! {
         <footer class="m-8">
-            // <Icon icon=Icon::Fi(FiIcon::FiGithub)/>
             <nav class="flex flex-row justify-center gap-2 p-2">
                 {socials.into_iter().map(|social| view! { <Svg social=social/> }).collect_view()}
             </nav>

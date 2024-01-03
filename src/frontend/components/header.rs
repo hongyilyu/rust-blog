@@ -5,7 +5,7 @@ use crate::frontend::components::{logo::Logo, theme_control::ThemeControl};
 
 #[component]
 pub fn Header() -> impl IntoView {
-    let nav_items = [("Posts", "/posts"), ("Open Source", "/open-source")];
+    let nav_items = [("About", "/"), ("Posts", "/posts"), ("Open Source", "/open-source")];
 
     // TODO: fix `w-full`
     view! {

@@ -7,7 +7,10 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 
-use crate::frontend::components::{footer::Footer, header::Header, theme_control::ThemeScript};
+use crate::frontend::{
+    components::{footer::Footer, header::Header, theme_control::ThemeScript},
+    pages::about::About,
+};
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -19,7 +22,7 @@ pub fn App() -> impl IntoView {
         <Router set_is_routing>
             <Routes>
                 <Route path="/" view=move || view! { <Layout is_routing/> }>
-                    <Route path="" view=frontend::components::logo::Logo/>
+                    <Route path="" view=About/>
                 </Route>
             </Routes>
         </Router>
@@ -38,7 +41,11 @@ pub fn Layout(is_routing: ReadSignal<bool>) -> impl IntoView {
 
         <div class="flex flex-col min-h-screen">
             <Header/>
-            <main class="grow">
+            <main
+                class="grow prose dark:prose-invert md:prose-lg prose-h1:font-bold prose-img:rounded prose-li:my-1 mx-auto px-2"
+                id="content"
+                role="main"
+            >
                 <Outlet/>
             </main>
             <Footer/>
