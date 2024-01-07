@@ -1,15 +1,15 @@
 use leptos::*;
 use leptos_icons::*;
 
-use crate::frontend::components::post_preview::PostPreview;
+use crate::{common::post::PostMetadata, frontend::components::post_preview::PostPreview};
 
 #[component]
-pub fn FeaturedPost() -> impl IntoView {
+pub fn FeaturedPost(metadata: PostMetadata) -> impl IntoView {
     let heading = "h3".to_owned();
     view! {
         <section class="relative rounded border px-4 py-3 shadow-md
-        bg-bgLight dark:border-gray-800 dark:bg-gray-900 dark:shadow-inner my-4">
-            <PostPreview heading=heading/>
+        bg-bgLight dark:border-gray-800 dark:bg-gray-900 dark:shadow-inner my-6">
+            <PostPreview heading metadata/>
             <Icon
                 icon=Icon::Fi(FiIcon::FiBookmark)
                 class="absolute -top-1 right-2 !my-0
