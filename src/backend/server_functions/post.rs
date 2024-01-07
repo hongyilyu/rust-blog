@@ -1,5 +1,5 @@
 #[cfg(feature = "ssr")]
-use crate::common::post::PostMetadata;
+use crate::common::post::{PostMetadata, PostAttribute};
 use crate::common::post::{Post, PostType};
 use leptos::*;
 #[cfg(feature = "ssr")]
@@ -52,11 +52,16 @@ fn get_post_files(relative_path: &String) -> Vec<PathBuf> {
     }
     files
 }
-fn read_post_content(entry: PathBuf) -> Option<String> {
+fn read_post_content(entry: &PathBuf) -> Option<String> {
     fs::read_to_string(entry).ok()
 }
 
-fn parse_post_content(content: String) -> Option<Post> {
+fn parse_post_content(file_path: PathBuf) -> Option<Post> {
+    let content = match read_post_content(&file_path) {
+        Some(v) => v,
+        None => return None,
+    };
+
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
     options.insert(Options::ENABLE_FOOTNOTES);
@@ -67,8 +72,7 @@ fn parse_post_content(content: String) -> Option<Post> {
 
     let post_data = matter
         .parse_with_struct::<PostMetadata>(&content)
-        .unwrap();
-        // .expect("Unable to parse md frontmatter");
+        .expect("Unable to parse md frontmatter");
     let post_metadata = post_data.data;
 
     let content = post_data.content;
@@ -77,9 +81,12 @@ fn parse_post_content(content: String) -> Option<Post> {
     let mut post_content = String::new();
     html::push_html(&mut post_content, parser);
 
+    let post_attribute = PostAttribute { file_path };
+
     Some(Post {
         post_metadata,
         post_content,
+        post_attribute,
     })
 }
 
@@ -97,10 +104,8 @@ fn process_posts(path: &String) -> Vec<Post> {
 
     let mut posts: Vec<Post> = posts_path
         .into_iter()
-        .filter_map(read_post_content)
         .filter_map(parse_post_content)
         .collect();
-
 
     sort_posts(&mut posts);
 

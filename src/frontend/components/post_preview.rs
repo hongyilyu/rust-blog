@@ -1,24 +1,32 @@
 use leptos::*;
 
-use crate::common::post::PostMetadata;
+use crate::common::{post::Post, util::file_path_to_uri};
 
 #[component]
-pub fn PostPreview(heading: String, metadata: PostMetadata) -> impl IntoView {
+pub fn PostPreview(heading: String, post: Post) -> impl IntoView {
     let heading_class = "mb-1 text-2xl font-bold";
+    let metadata = post.post_metadata;
+    let uri = file_path_to_uri(
+        post.post_attribute
+            .file_path
+            .to_str()
+            .expect("Expect valid utf-8 encoded string!"),
+    );
     let head = match heading.as_ref() {
         "h3" => view! {
             <h3 class=heading_class style="color:var(--tw-prose-headings)">
-                {move || metadata.title.clone()}
+                <a href=uri>{move || metadata.title.clone()}</a>
             </h3>
         }
         .into_view(),
         _ => view! {
             <h2 class=heading_class style="color:var(--tw-prose-headings)">
-                {move || metadata.title.clone()}
+                <a href=uri>{move || metadata.title.clone()}</a>
             </h2>
         }
         .into_view(),
     };
+
     view! {
         <article class="not-prose">
             <hgroup>

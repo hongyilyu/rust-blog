@@ -66,11 +66,12 @@ pub fn ThemeControl() -> impl IntoView {
         };
     };
     view! {
-        <IconButton on:click=on_click >
+        <IconButton on:click=on_click>
             {move || match theme.get() {
                 Theme::Dark => view! { <Icon icon=Icon::Fi(FiIcon::FiMoon)/> },
                 Theme::Light => view! { <Icon icon=Icon::Fi(FiIcon::FiSun)/> },
             }}
+
         </IconButton>
     }
 }
@@ -81,10 +82,8 @@ pub fn ThemeControl() -> impl IntoView {
 pub fn ThemeScript() -> impl IntoView {
     use leptos_meta::Script;
     const JS: &str = r#"
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const theme = localStorage.getItem("theme");
         if (
-            theme === '"Dark"' || theme === null 
+            localStorage.getItem("theme") === '"Dark"' || localStorage.getItem("theme") === null 
         ) {
             document.documentElement.classList.add("dark");
         }

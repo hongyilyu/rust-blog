@@ -32,7 +32,7 @@ pub fn About() -> impl IntoView {
                                         .iter()
                                         .map(|post| {
                                             view! {
-                                                <FeaturedPost metadata=post.post_metadata.clone()/>
+                                                <FeaturedPost post=post.clone()/>
                                             }
                                         })
                                         .collect_view()
