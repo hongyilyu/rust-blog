@@ -3,7 +3,7 @@ use leptos::*;
 use crate::common::{post::Post, util::file_path_to_uri};
 
 #[component]
-pub fn PostPreview(heading: String, post: Post) -> impl IntoView {
+pub fn PostPreview(#[prop(optional)] heading: String, post: Post) -> impl IntoView {
     let heading_class = "mb-1 text-2xl font-bold";
     let metadata = post.post_metadata;
     let uri = file_path_to_uri(

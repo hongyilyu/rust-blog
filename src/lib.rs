@@ -11,7 +11,7 @@ use leptos_router::*;
 
 use crate::frontend::{
     components::{footer::Footer, header::Header, theme_control::ThemeScript},
-    pages::about::About,
+    pages::{about::About, posts::Posts},
 };
 
 #[component]
@@ -25,6 +25,7 @@ pub fn App() -> impl IntoView {
             <Routes>
                 <Route path="/" view=move || view! { <Layout is_routing/> }>
                     <Route path="" view=About/>
+                    <Route path="/posts" view=Posts/>
                 </Route>
             </Routes>
         </Router>

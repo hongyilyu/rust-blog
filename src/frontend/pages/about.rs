@@ -10,7 +10,6 @@ use crate::{
 pub fn About() -> impl IntoView {
     let featured_post =
         create_resource(|| (), |_| async { list_posts_metadata(PostType::Blog).await });
-    let _featured_post = [1, 2, 3];
     view! {
         <div class="mx-auto py-16 sm:py-24 lg:py-28">
             <div class="text-center  prose dark:prose-invert md:prose-lg prose-h1:font-bold prose-img:rounded mx-auto px-2 max-w-2xl">
@@ -22,7 +21,7 @@ pub fn About() -> impl IntoView {
             <div>
                 <h2 class="text-center">Featured Posts</h2>
                 <section>
-                    <Suspense fallback=move || {
+                    <Transition fallback=move || {
                         view! { <p>"Loading..."</p> }
                     }>
                         {move || {
@@ -32,14 +31,14 @@ pub fn About() -> impl IntoView {
                                         .iter()
                                         .map(|post| {
                                             view! {
-                                                <FeaturedPost post=post.clone()/>
+                                                <FeaturedPost post=post.clone() heading=String::from("h3")/>
                                             }
                                         })
                                         .collect_view()
                                 })
                         }}
 
-                    </Suspense>
+                    </Transition>
                 </section>
             </div>
         </div>
