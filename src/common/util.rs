@@ -3,7 +3,6 @@ use regex::Regex;
 
 // Define the character set to encode (excluding - _ . ! ~ * ' ( ))
 const FRAGMENT: &AsciiSet = &CONTROLS
-    .add(b' ')
     .add(b'"')
     .add(b'#')
     .add(b'$')
@@ -33,5 +32,6 @@ fn encode_uri_component(s: String) -> String {
 
 pub fn file_path_to_uri(file_path: &str) -> String {
     let remove_file_type = Regex::new("\\.md").expect("Valid Regex").replace_all(file_path, "").to_string();
-    encode_uri_component(remove_file_type)
+    let replace_space = remove_file_type.replace(' ', "-");
+    encode_uri_component(replace_space)
 }

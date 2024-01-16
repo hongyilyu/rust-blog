@@ -219,4 +219,13 @@ span[data-rehype-pretty-code-fragment] > code {
   input[type='range']:focus {
     outline: none;
   }
+
+
+  /* My Customization ----------------------------------------------------------- */
+  .single-line {
+      grid-template-columns: auto minmax(20px, 1fr);
+  }
+  .border-t-dashed {
+      border-top: dashed;
+  }
 }

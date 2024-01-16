@@ -81,7 +81,15 @@ fn parse_post_content(file_path: PathBuf) -> Option<Post> {
     let mut post_content = String::new();
     html::push_html(&mut post_content, parser);
 
-    let post_attribute = PostAttribute { file_path };
+    let file_path_prefix_removed = file_path
+        .components()
+        .skip(2) // skip first two, should be universal to all types
+        .map(|comp| comp.as_os_str().to_str().expect("to have valid path str"))
+        .collect::<Vec<_>>()
+        .join("/");
+    let uri = crate::common::util::file_path_to_uri(&file_path_prefix_removed);
+
+    let post_attribute = PostAttribute { uri };
 
     Some(Post {
         post_metadata,

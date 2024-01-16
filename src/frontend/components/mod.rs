@@ -5,3 +5,5 @@ pub mod header;
 pub mod logo;
 pub mod post_preview;
 pub mod theme_control;
+pub mod year_splitter;
+pub mod post_preview_by_year;

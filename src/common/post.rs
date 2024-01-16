@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 use serde::{Deserialize, Serialize};
 use time::Date;
 
@@ -14,7 +12,7 @@ pub struct PostMetadata {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PostAttribute {
-    pub file_path: PathBuf,
+    pub uri: String,
 }
 
 pub type PostContent = String;

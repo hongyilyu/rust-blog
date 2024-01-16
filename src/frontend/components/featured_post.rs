@@ -14,7 +14,6 @@ pub fn FeaturedPost(post: Post, heading: String) -> impl IntoView {
                 class="absolute -top-1 right-2 !my-0
                 fill-white stroke-gray-500 dark:fill-gray-900/50"
             />
-
         </section>
     }
 }
