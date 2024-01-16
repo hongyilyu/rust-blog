@@ -9,23 +9,25 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 
-use crate::frontend::{
+use crate::{frontend::{
     components::{footer::Footer, header::Header, theme_control::ThemeScript},
-    pages::{about::About, posts::Posts},
-};
+    pages::{about::About, post::Post, posts::Posts},
+}, backend::server_functions::post::list_posts_metadata, common::post::PostType};
 
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
-
-    let (is_routing, set_is_routing) = create_signal(false);
+    let featured_post =
+        create_resource(|| (), |_| async { list_posts_metadata(PostType::Blog).await });
+    provide_context(featured_post);
 
     view! {
-        <Router set_is_routing>
+        <Router>
             <Routes>
-                <Route path="/" view=move || view! { <Layout is_routing/> }>
+                <Route path="/" view=Layout>
                     <Route path="" view=About/>
                     <Route path="/posts" view=Posts/>
+                    <Route path="/posts/:post" view=Post/>
                 </Route>
             </Routes>
         </Router>
@@ -33,11 +35,10 @@ pub fn App() -> impl IntoView {
 }
 
 #[component]
-pub fn Layout(is_routing: ReadSignal<bool>) -> impl IntoView {
+pub fn Layout() -> impl IntoView {
     view! {
         <Stylesheet id="leptos" href="/pkg/rust-blog.css"/>
         <Link rel="shortcut icon" type_="image/svg" href="/logo-black-bg.svg"/>
-        <RoutingProgress is_routing max_time=std::time::Duration::from_millis(250)/>
         <Meta name="description" content="Hongyi's Personal Website."/>
         <Title text="Hongyi Lyu"/>
         <ThemeScript/>

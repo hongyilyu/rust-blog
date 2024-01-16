@@ -1,20 +1,17 @@
-#[cfg(feature = "ssr")]
-use crate::common::post::{PostMetadata, PostAttribute};
 use crate::common::post::{Post, PostType};
-use leptos::*;
 #[cfg(feature = "ssr")]
-use std::collections::HashMap;
+use crate::common::post::{PostAttribute, PostMetadata};
+use leptos::*;
+
+#[server(GetSinglePost, "/api")]
+pub async fn get_single_post(post_type: PostType, post_uri: String) -> Result<Option<Post>, ServerFnError> {
+    let posts = list_posts_metadata(post_type).await.expect("to have posts!");
+    Ok(posts.into_iter().find(|post| post.post_attribute.uri == post_uri))
+}
 
 #[server(GetPosts, "/api")]
 pub async fn list_posts_metadata(post_type: PostType) -> Result<Vec<Post>, ServerFnError> {
-    let mut post_paths = HashMap::new();
-    post_paths.insert(PostType::Blog, "posts/blogs".to_owned());
-    post_paths.insert(PostType::OpenSource, "posts/projects".to_owned());
-    post_paths.insert(PostType::Book, "posts/books".to_owned());
-
-    let path = post_paths
-        .get(&post_type)
-        .expect("Should be one of the PostType Enum!");
+    let path = post_type.get_file_path();
     Ok(process_posts(path))
 }
 
@@ -39,7 +36,7 @@ fn visit_dirs(dir: &PathBuf, cb: &mut dyn FnMut(PathBuf)) -> std::io::Result<()>
     }
     Ok(())
 }
-fn get_post_files(relative_path: &String) -> Vec<PathBuf> {
+fn get_post_files(relative_path: &str) -> Vec<PathBuf> {
     let path = Path::new(relative_path).to_path_buf();
     let mut files = Vec::new();
     {
@@ -81,15 +78,17 @@ fn parse_post_content(file_path: PathBuf) -> Option<Post> {
     let mut post_content = String::new();
     html::push_html(&mut post_content, parser);
 
+    let post_type = PostType::from_path(&file_path);
     let file_path_prefix_removed = file_path
         .components()
         .skip(2) // skip first two, should be universal to all types
         .map(|comp| comp.as_os_str().to_str().expect("to have valid path str"))
         .collect::<Vec<_>>()
         .join("/");
-    let uri = crate::common::util::file_path_to_uri(&file_path_prefix_removed);
+    let uri = post_type.to_uri_prefix().to_owned()
+        + &crate::common::util::file_path_to_uri(&file_path_prefix_removed);
 
-    let post_attribute = PostAttribute { uri };
+    let post_attribute = PostAttribute { uri, post_type };
 
     Some(Post {
         post_metadata,
@@ -107,7 +106,7 @@ fn sort_posts(posts: &mut [Post]) {
     });
 }
 
-fn process_posts(path: &String) -> Vec<Post> {
+fn process_posts(path: &str) -> Vec<Post> {
     let posts_path = get_post_files(path);
 
     let mut posts: Vec<Post> = posts_path
