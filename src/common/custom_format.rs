@@ -34,7 +34,6 @@ mod tests {
         let my_struct = PostMetadata {
             title: "title".to_owned(),
             description: "description".to_owned(),
-            reading_time: "10 min".to_owned(),
             publication_date: date!(2019 - 01 - 01),
         };
 

@@ -32,7 +32,7 @@ pub fn PostPreview(#[prop(optional)] heading: String, post: Post) -> impl IntoVi
                             {metadata.publication_date.to_string()}
                         </span>
                         " • "
-                        {metadata.reading_time}
+                        {post.post_attribute.reading_time}
                     </span>
                 </figcaption> <p class="mt-3 leading-relaxed">{metadata.description}</p>
             </hgroup>

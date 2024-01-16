@@ -24,7 +24,7 @@ pub fn Post() -> impl IntoView {
                             if let Some(post) = post {
                                 view! {
                                     <article>
-                                        <PostHeader post=post.post_metadata.clone()/>
+                                        <PostHeader post=post.clone()/>
                                         <div inner_html=post.post_content.clone()></div>
                                     </article>
                                 }

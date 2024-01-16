@@ -1,6 +1,6 @@
 use crate::common::post::{Post, PostType};
 #[cfg(feature = "ssr")]
-use crate::common::post::{PostAttribute, PostMetadata};
+use crate::common::{post::{PostAttribute, PostMetadata}, util::calculate_reading_time};
 use leptos::*;
 
 #[server(GetSinglePost, "/api")]
@@ -87,8 +87,9 @@ fn parse_post_content(file_path: PathBuf) -> Option<Post> {
         .join("/");
     let uri = post_type.to_uri_prefix().to_owned()
         + &crate::common::util::file_path_to_uri(&file_path_prefix_removed);
+    let reading_time = calculate_reading_time(&post_content);
 
-    let post_attribute = PostAttribute { uri, post_type };
+    let post_attribute = PostAttribute { uri, post_type, reading_time };
 
     Some(Post {
         post_metadata,
