@@ -10,8 +10,8 @@ use leptos_meta::*;
 use leptos_router::*;
 
 use crate::{frontend::{
-    components::{footer::Footer, header::Header, theme_control::ThemeScript},
-    pages::{about::About, post::Post, posts::Posts},
+    components::{footer::Footer, header::Header},
+    pages::{about::About, post::Post, posts::Posts}, scripts::{theme_control::ThemeScript, highlight_js::HighlightScript},
 }, backend::server_functions::post::list_posts_metadata, common::post::PostType};
 
 #[component]
@@ -27,7 +27,16 @@ pub fn App() -> impl IntoView {
                 <Route path="/" view=Layout>
                     <Route path="" view=About/>
                     <Route path="/posts" view=Posts/>
-                    <Route path="/posts/:post" view=Post/>
+                    <Route
+                        path="/posts/:post"
+                        view=move || {
+                            view! {
+                                <HighlightScript/>
+                                <Post/>
+                            }
+                        }
+                    />
+
                 </Route>
             </Routes>
         </Router>

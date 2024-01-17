@@ -228,4 +228,8 @@ span[data-rehype-pretty-code-fragment] > code {
   .border-t-dashed {
       border-top: dashed;
   }
+
+  .hljs {
+      background: transparent !important;
+  }
 }

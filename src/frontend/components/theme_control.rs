@@ -59,7 +59,6 @@ pub fn ThemeControl() -> impl IntoView {
         Theme::Dark => set_dark_theme(),
     });
     let on_click = move |_: web_sys::MouseEvent| {
-        log::info!("{:#}", theme.get());
         match theme.get() {
             Theme::Dark => set_theme(Theme::Light),
             Theme::Light => set_theme(Theme::Dark),
@@ -74,19 +73,4 @@ pub fn ThemeControl() -> impl IntoView {
 
         </IconButton>
     }
-}
-
-/// Script to set the theme based on local storage
-/// This is blocking by design: to avoid a flash of light theme
-#[component]
-pub fn ThemeScript() -> impl IntoView {
-    use leptos_meta::Script;
-    const JS: &str = r#"
-        if (
-            localStorage.getItem("theme") === '"Dark"' || localStorage.getItem("theme") === null 
-        ) {
-            document.documentElement.classList.add("dark");
-        }
-    "#;
-    view! { <Script>{JS}</Script> }
 }
