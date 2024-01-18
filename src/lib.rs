@@ -11,7 +11,7 @@ use leptos_router::*;
 
 use crate::{frontend::{
     components::{footer::Footer, header::Header},
-    pages::{about::About, post::Post, posts::Posts}, scripts::{theme_control::ThemeScript, highlight_js::HighlightScript},
+    pages::{about::About, post::Post, posts::Posts, year_posts::YearPosts}, scripts::{theme_control::ThemeScript, highlight_js::HighlightScript},
 }, backend::server_functions::post::list_posts_metadata, common::post::PostType};
 
 #[component]
@@ -27,8 +27,9 @@ pub fn App() -> impl IntoView {
                 <Route path="/" view=Layout>
                     <Route path="" view=About/>
                     <Route path="/posts" view=Posts/>
+                    <Route path="/posts/:year" view=YearPosts/>
                     <Route
-                        path="/posts/:post"
+                        path="/posts/:year/:post"
                         view=move || {
                             view! {
                                 <Post/>
@@ -55,7 +56,7 @@ pub fn Layout() -> impl IntoView {
         <div class="flex flex-col min-h-screen">
             <Header/>
             <main
-                class="grow prose dark:prose-invert md:prose-lg prose-h1:font-bold prose-img:rounded prose-li:my-1 mx-auto px-2"
+                class="grow prose dark:prose-invert md:prose-lg prose-h1:font-bold prose-img:rounded prose-li:my-1 mx-auto px-2 max-w-3xl w-full"
                 id="content"
                 role="main"
             >

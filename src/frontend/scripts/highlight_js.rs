@@ -5,22 +5,22 @@ use leptos_meta::*;
 #[component]
 pub fn HighlightScript() -> impl IntoView {
     view! {
-        <Script
+        <script
             type_="text/javascript"
             src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/highlight.min.js"
-        />
-        <Link
+        ></script>
+        <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/base16/material-palenight.min.css"
         />
-        <Script
+        <script
             type_="text/javascript"
             src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/languages/dockerfile.min.js"
-        />
+        ></script>
         <Script>
-            document.addEventListener("DOMContentLoaded", (event) => {
+            setTimeout(()=>{
                 hljs.highlightAll();
-            });
+            }, 500)
         </Script>
     }
 }

@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos_router::*;
 
 use crate::frontend::components::{logo::Logo, theme_control::ThemeControl};
 
@@ -16,7 +17,7 @@ pub fn Header() -> impl IntoView {
                 </a>
                 {nav_items
                     .into_iter()
-                    .map(|item| view! { <a href=item.1>{item.0}</a> })
+                    .map(|item| view! { <A href=item.1>{item.0}</A> })
                     .collect_view()}
             </nav>
             <nav class="ml-auto flex" aria-label="Settings">
