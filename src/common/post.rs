@@ -58,9 +58,9 @@ impl PostType {
 
     pub fn to_uri_prefix(&self) -> &str {
         match self {
-            PostType::Blog => "/posts/",
-            PostType::OpenSource => "/projects/",
-            PostType::Book => "/books/",
+            PostType::Blog => "posts",
+            PostType::OpenSource => "projects",
+            PostType::Book => "books",
         }
     }
 }

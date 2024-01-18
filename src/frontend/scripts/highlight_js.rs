@@ -5,13 +5,13 @@ use leptos_meta::*;
 #[component]
 pub fn HighlightScript() -> impl IntoView {
     view! {
-        <Link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/base16/material-palenight.min.css"
-        />
         <Script
             type_="text/javascript"
             src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/highlight.min.js"
+        />
+        <Link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@latest/build/styles/base16/material-palenight.min.css"
         />
         <Script
             type_="text/javascript"

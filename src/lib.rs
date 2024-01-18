@@ -31,8 +31,8 @@ pub fn App() -> impl IntoView {
                         path="/posts/:post"
                         view=move || {
                             view! {
-                                <HighlightScript/>
                                 <Post/>
+                                <HighlightScript/>
                             }
                         }
                     />

@@ -1,13 +1,10 @@
 use crate::common::post::{Post, PostType};
 #[cfg(feature = "ssr")]
-use crate::common::{post::{PostAttribute, PostMetadata}, util::calculate_reading_time};
+use crate::common::{
+    post::{PostAttribute, PostMetadata},
+    util::calculate_reading_time,
+};
 use leptos::*;
-
-#[server(GetSinglePost, "/api")]
-pub async fn get_single_post(post_type: PostType, post_uri: String) -> Result<Option<Post>, ServerFnError> {
-    let posts = list_posts_metadata(post_type).await.expect("to have posts!");
-    Ok(posts.into_iter().find(|post| post.post_attribute.uri == post_uri))
-}
 
 #[server(GetPosts, "/api")]
 pub async fn list_posts_metadata(post_type: PostType) -> Result<Vec<Post>, ServerFnError> {
@@ -41,8 +38,10 @@ fn get_post_files(relative_path: &str) -> Vec<PathBuf> {
     let mut files = Vec::new();
     {
         let mut add_to_vec = |p: PathBuf| {
-            if p.extension() == Some("md".as_ref()) {
-                files.push(p)
+            if let Some(filename) = p.file_name().and_then(|f| f.to_str()) {
+                if filename == "page.md" || filename == "page.mdx" {
+                    files.push(p)
+                }
             }
         };
         let _ = visit_dirs(&path, &mut add_to_vec);
@@ -79,17 +78,25 @@ fn parse_post_content(file_path: PathBuf) -> Option<Post> {
     html::push_html(&mut post_content, parser);
 
     let post_type = PostType::from_path(&file_path);
-    let file_path_prefix_removed = file_path
-        .components()
-        .skip(2) // skip first two, should be universal to all types
-        .map(|comp| comp.as_os_str().to_str().expect("to have valid path str"))
+    let file_path_prefix_removed = std::iter::once(post_type.to_uri_prefix())
+        .chain(
+            file_path
+                .parent()
+                .expect("to have a parent directory!")
+                .components()
+                .skip(2) // skip first two, should be universal to all types
+                .map(|comp| comp.as_os_str().to_str().expect("to have valid path str")),
+        )
         .collect::<Vec<_>>()
         .join("/");
-    let uri = post_type.to_uri_prefix().to_owned()
-        + &crate::common::util::file_path_to_uri(&file_path_prefix_removed);
+    let uri = crate::common::util::file_path_to_uri(&file_path_prefix_removed);
     let reading_time = calculate_reading_time(&post_content);
 
-    let post_attribute = PostAttribute { uri, post_type, reading_time };
+    let post_attribute = PostAttribute {
+        post_type,
+        uri,
+        reading_time,
+    };
 
     Some(Post {
         post_metadata,
