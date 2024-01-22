@@ -1,9 +1,4 @@
 use crate::common::post::{Post, PostType};
-#[cfg(feature = "ssr")]
-use crate::common::{
-    post::{PostAttribute, PostMetadata},
-    util::calculate_reading_time,
-};
 use leptos::*;
 
 #[server(GetPosts, "/api")]
@@ -16,9 +11,16 @@ cfg_if::cfg_if! { if #[cfg(feature = "ssr")] {
 use std::fs;
 use std::path::{Path, PathBuf};
 
+use crate::{
+    backend::utils::markdown_parser::get_parsed_content,
+    common::{
+        post::{PostAttribute, PostMetadata},
+        util::calculate_reading_time,
+    },
+};
+
 use gray_matter::engine::YAML;
 use gray_matter::Matter;
-use pulldown_cmark::{html, Options, Parser};
 
 fn visit_dirs(dir: &PathBuf, cb: &mut dyn FnMut(PathBuf)) -> std::io::Result<()> {
     if dir.is_dir() {
@@ -58,26 +60,25 @@ fn parse_post_content(file_path: PathBuf) -> Option<Post> {
         None => return None,
     };
 
-    let mut options = Options::empty();
-    options.insert(Options::ENABLE_TABLES);
-    options.insert(Options::ENABLE_FOOTNOTES);
-    options.insert(Options::ENABLE_STRIKETHROUGH);
-    options.insert(Options::ENABLE_TASKLISTS);
-
     let matter = Matter::<YAML>::new();
 
-    let post_data = matter
+    let post = matter
         .parse_with_struct::<PostMetadata>(&content)
         .expect("Unable to parse md frontmatter");
-    let post_metadata = post_data.data;
 
-    let content = post_data.content;
+    let post_metadata = post.data;
+    let post_attribute = get_post_attribute(&post.content, &file_path);
+    let post_content = get_parsed_content(&post.content, &file_path);
 
-    let parser = Parser::new_ext(&content, options);
-    let mut post_content = String::new();
-    html::push_html(&mut post_content, parser);
+    Some(Post {
+        post_metadata,
+        post_content,
+        post_attribute,
+    })
+}
 
-    let post_type = PostType::from_path(&file_path);
+fn get_post_attribute(content: &str, file_path: &PathBuf) -> PostAttribute {
+    let post_type = PostType::from_path(file_path);
     let file_path_prefix_removed = std::iter::once(post_type.to_uri_prefix())
         .chain(
             file_path
@@ -90,19 +91,14 @@ fn parse_post_content(file_path: PathBuf) -> Option<Post> {
         .collect::<Vec<_>>()
         .join("/");
     let uri = crate::common::util::file_path_to_uri(&file_path_prefix_removed);
-    let reading_time = calculate_reading_time(&post_content);
 
-    let post_attribute = PostAttribute {
+    let reading_time = calculate_reading_time(content);
+
+    PostAttribute {
         post_type,
         uri,
         reading_time,
-    };
-
-    Some(Post {
-        post_metadata,
-        post_content,
-        post_attribute,
-    })
+    }
 }
 
 fn sort_posts(posts: &mut [Post]) {
