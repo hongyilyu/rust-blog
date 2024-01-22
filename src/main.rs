@@ -1,11 +1,12 @@
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() {
-    use axum::{routing::post, Router};
+    use axum::{routing::{post, get}, Router};
     use leptos::*;
     use leptos_axum::{generate_route_list, LeptosRoutes};
-    use rust_blog::App;
+    use rust_blog::backend::routes::static_file::get_post_file;
     use rust_blog::fileserv::file_and_error_handler;
+    use rust_blog::App;
 
     simple_logger::init_with_level(log::Level::Debug).expect("couldn't initialize logging");
 
@@ -22,6 +23,7 @@ async fn main() {
     // build our application with a route
     let app = Router::new()
         .route("/api/*fn_name", post(leptos_axum::handle_server_fns))
+        .route("/static/*file_path", get(get_post_file))
         .leptos_routes(&leptos_options, routes, App)
         .fallback(file_and_error_handler)
         .with_state(leptos_options);
