@@ -24,9 +24,8 @@ where
 
 #[cfg(test)]
 mod tests {
-    use time::macros::date;
     use crate::common::post::PostMetadata;
-
+    use time::macros::date;
 
     #[test]
     fn test_my_struct_serialization_deserialization() {
@@ -42,7 +41,8 @@ mod tests {
         println!("{}", serialized);
 
         // Deserialize it back
-        let deserialized: PostMetadata = serde_json::from_str(&serialized).expect("Failed to deserialize");
+        let deserialized: PostMetadata =
+            serde_json::from_str(&serialized).expect("Failed to deserialize");
 
         // Assert that the deserialized instance matches the original
         assert_eq!(my_struct.publication_date, deserialized.publication_date);

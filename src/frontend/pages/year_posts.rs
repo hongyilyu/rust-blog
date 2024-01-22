@@ -1,26 +1,27 @@
 use leptos::*;
-use leptos_router::*;
 use leptos_icons::*;
+use leptos_router::*;
 
-use crate::{backend::server_functions::post::list_posts_metadata, common::post::PostType};
 use crate::frontend::components::post_preview_by_year::PostPreviewByYear;
-
+use crate::{backend::server_functions::post::list_posts_metadata, common::post::PostType};
 
 #[derive(Params, PartialEq)]
 pub struct YearParams {
     pub year: i32,
 }
 
-
 #[component]
 pub fn YearPosts() -> impl IntoView {
-    let featured_post =
-        create_resource(|| (), |_| async { list_posts_metadata(PostType::Blog).await });
+    let featured_post = create_resource(
+        || (),
+        |_| async { list_posts_metadata(PostType::Blog).await },
+    );
 
     let params = use_params::<YearParams>();
     let year = move || {
         params.with(|params| {
-            params.as_ref()
+            params
+                .as_ref()
                 .map(|params| params.year)
                 .unwrap_or_default()
         })

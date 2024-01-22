@@ -3,10 +3,13 @@ use leptos_router::*;
 
 use crate::frontend::components::{logo::Logo, theme_control::ThemeControl};
 
-
 #[component]
 pub fn Header() -> impl IntoView {
-    let nav_items = [("About", "/"), ("Blog", "/posts"), ("Open Source", "/open-source")];
+    let nav_items = [
+        ("About", "/"),
+        ("Blog", "/posts"),
+        ("Open Source", "/open-source"),
+    ];
 
     // TODO: fix `w-full`
     view! {

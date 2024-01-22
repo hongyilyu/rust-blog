@@ -5,13 +5,15 @@ use leptos_icons::*;
 use time::OffsetDateTime;
 
 use crate::common::post::Post;
-use crate::{backend::server_functions::post::list_posts_metadata, common::post::PostType};
 use crate::frontend::components::post_preview_by_year::PostPreviewByYear;
+use crate::{backend::server_functions::post::list_posts_metadata, common::post::PostType};
 
 #[component]
 pub fn Posts() -> impl IntoView {
-    let featured_post =
-        create_resource(|| (), |_| async { list_posts_metadata(PostType::Blog).await });
+    let featured_post = create_resource(
+        || (),
+        |_| async { list_posts_metadata(PostType::Blog).await },
+    );
 
     view! {
         <header class="flex items-baseline">

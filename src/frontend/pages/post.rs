@@ -1,12 +1,19 @@
 use leptos::*;
 use leptos_router::use_location;
 
-use crate::{backend::server_functions::post::list_posts_metadata, common::post::PostType, error_template::{AppError, ErrorTemplate}, frontend::components::post_header::PostHeader};
+use crate::{
+    backend::server_functions::post::list_posts_metadata,
+    common::post::PostType,
+    error_template::{AppError, ErrorTemplate},
+    frontend::components::post_header::PostHeader,
+};
 
 #[component]
 pub fn Post() -> impl IntoView {
-    let featured_post =
-        create_resource(|| (), |_| async { list_posts_metadata(PostType::Blog).await });
+    let featured_post = create_resource(
+        || (),
+        |_| async { list_posts_metadata(PostType::Blog).await },
+    );
     view! {
         <div>
             <Transition fallback=move || {

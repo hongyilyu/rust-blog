@@ -8,8 +8,10 @@ use crate::{
 // TODO: Maybe add another button at bottom routing to all posts
 #[component]
 pub fn About() -> impl IntoView {
-    let featured_post =
-        create_resource(|| (), |_| async { list_posts_metadata(PostType::Blog).await });
+    let featured_post = create_resource(
+        || (),
+        |_| async { list_posts_metadata(PostType::Blog).await },
+    );
     view! {
         <div class="mx-auto py-16 sm:py-24 lg:py-28">
             <div class="text-center  prose dark:prose-invert md:prose-lg prose-h1:font-bold prose-img:rounded mx-auto px-2 max-w-2xl">
