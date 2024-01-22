@@ -79,6 +79,6 @@ Here's a simple footnote[^1].
 ### Images
 ![Alt text for the image](https://via.placeholder.com/150)
 ![test for hack](./rust.jpeg)
-
+![test for hack2](https://github.com/hongyilyu/rust-blog/blob/master/posts/blogs/2023/sample-markdown-test/rust.jpeg?raw=true)
 ## Conclusion
 This extended Markdown file should help in testing various typographic elements like tables, footnotes, strikethroughs, and task lists, styled using Tailwind CSS.
