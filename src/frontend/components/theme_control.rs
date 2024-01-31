@@ -67,8 +67,8 @@ pub fn ThemeControl() -> impl IntoView {
     view! {
         <IconButton on:click=on_click>
             {move || match theme.get() {
-                Theme::Dark => view! { <Icon icon=Icon::Fi(FiIcon::FiMoon)/> },
-                Theme::Light => view! { <Icon icon=Icon::Fi(FiIcon::FiSun)/> },
+                Theme::Dark => view! { <Icon icon=icondata::FiMoon/> },
+                Theme::Light => view! { <Icon icon=icondata::FiSun/> },
             }}
 
         </IconButton>

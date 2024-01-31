@@ -4,7 +4,7 @@ use leptos_icons::*;
 struct Social<'a> {
     name: &'a str,
     url: &'a str,
-    icon: Icon,
+    icon: icondata::Icon,
 }
 
 #[component]
@@ -26,17 +26,17 @@ pub fn Footer() -> impl IntoView {
         Social {
             name: "github",
             url: "https://github.com/hongyilyu",
-            icon: Icon::Fi(FiIcon::FiGithub),
+            icon: icondata::FiGithub,
         },
         Social {
             name: "linkedin",
             url: "https://linkedin.com/in/hongyilyu",
-            icon: Icon::Fi(FiIcon::FiLinkedin),
+            icon: icondata::FiLinkedin,
         },
         Social {
             name: "twitter",
             url: "https://twitter.com/LHY_IS_LEARNING",
-            icon: Icon::Fi(FiIcon::FiTwitter),
+            icon: icondata::FiTwitter,
         },
     ];
 

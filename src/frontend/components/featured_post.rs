@@ -1,5 +1,5 @@
 use leptos::*;
-use leptos_icons::*;
+use leptos_icons::Icon;
 
 use crate::{common::post::Post, frontend::components::post_preview::PostPreview};
 
@@ -10,7 +10,7 @@ pub fn FeaturedPost(post: Post, heading: String) -> impl IntoView {
         bg-bgLight dark:border-gray-800 dark:bg-gray-900 dark:shadow-inner my-6">
             <PostPreview heading post/>
             <Icon
-                icon=Icon::Fi(FiIcon::FiBookmark)
+                icon=icondata::FiBookmark
                 class="absolute -top-1 right-2 !my-0
                 fill-white stroke-gray-500 dark:fill-gray-900/50"
             />

@@ -19,7 +19,7 @@ pub fn Posts() -> impl IntoView {
         <header class="flex items-baseline">
             <h1>Articles</h1>
             <nav class="not-prose ml-auto space-x-2 text-sm text-gray-500">
-                <Icon class="-mt-1 inline-block stroke-amber-500" icon=Icon::Fi(FiIcon::FiRss)/>
+                <Icon class="-mt-1 inline-block stroke-amber-500" icon=icondata::FiRss/>
             </nav>
         </header>
 

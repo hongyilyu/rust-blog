@@ -2,6 +2,7 @@ use leptos::*;
 use leptos_icons::*;
 use leptos_router::*;
 
+use crate::frontend::components::buttons::filtered_tag_button::FilteredTagButton;
 use crate::frontend::components::post_preview_by_year::PostPreviewByYear;
 use crate::{backend::server_functions::post::list_posts_metadata, common::post::PostType};
 
@@ -31,9 +32,13 @@ pub fn YearPosts() -> impl IntoView {
         <header class="flex items-baseline">
             <h1>Articles</h1>
             <nav class="not-prose ml-auto space-x-2 text-sm text-gray-500">
-                <Icon class="-mt-1 inline-block stroke-amber-500" icon=Icon::Fi(FiIcon::FiRss)/>
+                <Icon class="-mt-1 inline-block stroke-amber-500" icon=icondata::FiRss/>
             </nav>
         </header>
+
+        <nav class="flex items-center justify-between">
+            <FilteredTagButton/>
+        </nav>
 
         <section class="mt-12 space-y-12">
 
