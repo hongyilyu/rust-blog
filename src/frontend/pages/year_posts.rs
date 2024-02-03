@@ -2,9 +2,10 @@ use leptos::*;
 use leptos_icons::*;
 use leptos_router::*;
 
+use crate::backend::server_functions::post::list_year_posts_metadata;
 use crate::frontend::components::buttons::filtered_tag_button::FilteredTagButton;
 use crate::frontend::components::post_preview_by_year::PostPreviewByYear;
-use crate::{backend::server_functions::post::list_posts_metadata, common::post::PostType};
+use crate::common::post::PostType;
 
 #[derive(Params, PartialEq)]
 pub struct YearParams {
@@ -13,11 +14,6 @@ pub struct YearParams {
 
 #[component]
 pub fn YearPosts() -> impl IntoView {
-    let featured_post = create_resource(
-        || (),
-        |_| async { list_posts_metadata(PostType::Blog).await },
-    );
-
     let params = use_params::<YearParams>();
     let year = move || {
         params.with(|params| {
@@ -27,6 +23,12 @@ pub fn YearPosts() -> impl IntoView {
                 .unwrap_or_default()
         })
     };
+
+    let featured_post = create_resource(
+        year, 
+        |val| async move { list_year_posts_metadata(PostType::Blog, val).await },
+    );
+
 
     view! {
         <header class="flex items-baseline">
@@ -48,15 +50,9 @@ pub fn YearPosts() -> impl IntoView {
                 {move || {
                     featured_post
                         .and_then(|posts| {
-                            let mut year_posts = posts
-                                .iter()
-                                .filter(|post| {
-                                    post.post_metadata.publication_date.year().eq(&year())
-                                })
-                                .cloned()
-                                .collect::<Vec<_>>();
-                            year_posts.sort_by_key(|post| post.post_metadata.publication_date);
-                            view! { <PostPreviewByYear year=year() posts=year_posts/> }
+                            let mut posts = posts.clone();
+                            posts.sort_by_key(|post| post.post_metadata.publication_date);
+                            view! { <PostPreviewByYear year=year() posts/> }
                         })
                 }}
 

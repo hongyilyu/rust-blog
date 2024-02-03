@@ -7,6 +7,12 @@ pub async fn list_posts_metadata(post_type: PostType) -> Result<Vec<Post>, Serve
     Ok(process_posts(path))
 }
 
+#[server(GetYearPosts, "/api")]
+pub async fn list_year_posts_metadata(post_type: PostType, year: i32) -> Result<Vec<Post>, ServerFnError> {
+    let path = post_type.get_file_path();
+    Ok(process_posts(path).into_iter().filter(|post| post.post_metadata.publication_date.year() == year).collect())
+}
+
 cfg_if::cfg_if! { if #[cfg(feature = "ssr")] {
 use std::fs;
 use std::path::{Path, PathBuf};
