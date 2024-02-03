@@ -2,11 +2,13 @@ use std::collections::HashMap;
 
 use leptos::*;
 use leptos_icons::*;
+use leptos_router::create_query_signal;
 use time::OffsetDateTime;
 
 use crate::common::post::Post;
 use crate::frontend::components::buttons::filtered_tag_button::FilteredTagButton;
 use crate::frontend::components::post_preview_by_year::PostPreviewByYear;
+use crate::frontend::components::tag::Tags;
 use crate::{backend::server_functions::post::list_posts_metadata, common::post::PostType};
 
 #[component]
@@ -15,6 +17,7 @@ pub fn Posts() -> impl IntoView {
         || (),
         |_| async { list_posts_metadata(PostType::Blog).await },
     );
+    let (tags, _) = create_query_signal::<Tags>("tags");
 
     view! {
         <header class="flex items-baseline">
@@ -39,7 +42,25 @@ pub fn Posts() -> impl IntoView {
                     featured_post
                         .and_then(|posts| {
                             let mut map = HashMap::<i32, Vec<Post>>::new();
-                            posts
+                            let filtered_posts: Vec<Post> = if !tags
+                                .get()
+                                .unwrap_or_default()
+                                .is_empty()
+                            {
+                                posts
+                                    .iter()
+                                    .filter(|post| {
+                                        tags.get()
+                                            .unwrap_or_default()
+                                            .iter()
+                                            .all(|tag| post.post_metadata.tags.contains(tag))
+                                    })
+                                    .cloned()
+                                    .collect()
+                            } else {
+                                posts.clone()
+                            };
+                            filtered_posts
                                 .iter()
                                 .for_each(|post| {
                                     map.entry(post.post_metadata.publication_date.year())
