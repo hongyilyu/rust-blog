@@ -1,6 +1,6 @@
 use leptos::*;
 
-use crate::common::post::Post;
+use crate::{common::post::Post, frontend::components::tag::TagStatic};
 
 #[component]
 pub fn PostHeader(post: Post) -> impl IntoView {
@@ -12,9 +12,12 @@ pub fn PostHeader(post: Post) -> impl IntoView {
             <figcaption class="flex flex-wrap gap-2 text-sm text-gray-500">
                 "Hongyi Lyu  • " {post.post_metadata.publication_date.to_string()} " • "
                 {post.post_attribute.reading_time}
-            // {tags && Boolean(tags.length) && (
-            // <TagsNav tags={tags} class="ml-auto" />
-            // )}
+                {post
+                    .post_metadata
+                    .tags
+                    .iter()
+                    .map(|tag| view! { <TagStatic tag/> })
+                    .collect_view()}
             </figcaption>
         </figure>
     }

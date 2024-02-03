@@ -9,34 +9,26 @@ use std::{
 };
 
 #[derive(PartialEq, Eq, Clone, Default)]
-pub struct Tags(pub String);
+pub struct Tags(Vec<String>);
 
 impl Tags {
-    pub fn add_tag(mut self, tag: &str) -> Option<Self> {
-        let mut elements: Vec<&str> = if self.0.is_empty() {
-            Vec::new()
-        } else {
-            self.0.split(',').collect()
-        };
-        if !elements.contains(&tag) {
-            elements.push(tag);
-            self.0 = elements.join(",");
+    pub fn add_tag(mut self, tag: &String) -> Option<Self> {
+        if !self.contains(tag) {
+            self.push(tag.clone());
         }
         Some(self)
     }
 
-    pub fn remove_tag(mut self, s: &str) -> Option<Self> {
-        let elements: Vec<&str> = self.0.split(',').collect();
-        let filtered_elements: Vec<&str> = elements
+    pub fn remove_tag(self, s: &str) -> Option<Self> {
+        let filtered_elements: Vec<String> = <Vec<String> as Clone>::clone(&self)
             .into_iter()
-            .filter(|&element| element != s)
+            .filter(|element| element != s)
             .collect();
 
         if filtered_elements.is_empty() {
             None
         } else {
-            self.0 = filtered_elements.join(",");
-            Some(self)
+            Some(Tags(filtered_elements))
         }
     }
 }
@@ -45,18 +37,27 @@ impl FromStr for Tags {
     type Err = Infallible;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(Tags(s.to_owned()))
+        if s.is_empty() {
+            Ok(Tags(Vec::new()))
+        } else {
+            Ok(Tags(s.split(',').map(|tag| tag.to_owned()).collect()))
+        }
     }
 }
 
 impl Display for Tags {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.0)
+        let s = if self.is_empty() {
+            String::new()
+        } else {
+            self.join(",")
+        };
+        write!(f, "{s}")
     }
 }
 
 impl Deref for Tags {
-    type Target = String;
+    type Target = Vec<String>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
@@ -106,4 +107,11 @@ pub fn TagRemove(#[prop(into)] tag: String) -> impl IntoView {
             <span class="no-underline hover:line-through">{tag}</span>
         </button>
     }
+}
+
+#[component]
+pub fn TagStatic(#[prop(into)] tag: String) -> impl IntoView {
+    let class_name = TAG_CLASS;
+
+    view! { <span class=class_name>{tag}</span> }
 }
