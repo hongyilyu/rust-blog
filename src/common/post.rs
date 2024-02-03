@@ -11,6 +11,7 @@ const BOOK_FILE_PATH: &str = "posts/books";
 pub struct PostMetadata {
     pub title: String,
     pub description: String,
+    pub tags: Vec<String>,
     #[serde(with = "crate::common::custom_format")]
     pub publication_date: Date,
 }

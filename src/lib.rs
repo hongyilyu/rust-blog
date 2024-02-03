@@ -9,24 +9,15 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 
-use crate::{
-    backend::server_functions::post::list_posts_metadata,
-    common::post::PostType,
-    frontend::{
-        components::{footer::Footer, header::Header},
-        pages::{about::About, post::Post, posts::Posts, year_posts::YearPosts},
-        scripts::{highlight_js::HighlightScript, theme_control::ThemeScript},
-    },
+use crate::frontend::{
+    components::{footer::Footer, header::Header},
+    pages::{about::About, post::Post, posts::Posts, year_posts::YearPosts},
+    scripts::{highlight_js::HighlightScript, theme_control::ThemeScript},
 };
 
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
-    let featured_post = create_resource(
-        || (),
-        |_| async { list_posts_metadata(PostType::Blog).await },
-    );
-    provide_context(featured_post);
 
     view! {
         <Router>

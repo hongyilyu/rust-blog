@@ -5,6 +5,7 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      opacity: ['hover'],
       colors: {
         gray: colors.slate,
         bgDark: '#0a101d',

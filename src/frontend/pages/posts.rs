@@ -5,6 +5,7 @@ use leptos_icons::*;
 use time::OffsetDateTime;
 
 use crate::common::post::Post;
+use crate::frontend::components::buttons::filtered_tag_button::FilteredTagButton;
 use crate::frontend::components::post_preview_by_year::PostPreviewByYear;
 use crate::{backend::server_functions::post::list_posts_metadata, common::post::PostType};
 
@@ -23,12 +24,17 @@ pub fn Posts() -> impl IntoView {
             </nav>
         </header>
 
+        <nav class="flex items-center justify-between">
+            <FilteredTagButton/>
+        </nav>
+
         <section class="mt-12 space-y-12">
 
             <Transition fallback=move || {
                 view! { <p>"Loading..."</p> }
             }>
                 // TODO: The logic is ugly as fk.
+                // TODO: In theroy serde should preserve order with json.
                 {move || {
                     featured_post
                         .and_then(|posts| {

@@ -2,6 +2,9 @@
 title: Enhancing Tailwind Typography with Highlight.js
 publication_date: 2024-01-17
 description: Syntax highlighting is the key.
+tags:
+    - rust
+    - leptos
 ---
 
 If you have used Tailwind's Typography plugin to style Markdown text, you may have seen the plain default code block styles:

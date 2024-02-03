@@ -2,7 +2,8 @@
 title: Extended Sample Markdown File for Tailwind CSS Typography Testing
 publication_date: 2023-12-31
 description: Testing the layout of the site.
-reading_time: 10 min
+tags:
+    - test
 ---
 
 

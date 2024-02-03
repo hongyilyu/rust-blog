@@ -6,5 +6,6 @@ pub mod logo;
 pub mod post_header;
 pub mod post_preview;
 pub mod post_preview_by_year;
+pub mod tag;
 pub mod theme_control;
 pub mod year_splitter;
