@@ -1,11 +1,8 @@
-use std::collections::HashMap;
-
 use leptos::*;
 use leptos_icons::*;
 use leptos_router::create_query_signal;
 use time::OffsetDateTime;
 
-use crate::common::post::Post;
 use crate::frontend::components::buttons::filtered_tag_button::FilteredTagButton;
 use crate::frontend::components::post_preview_by_year::PostPreviewByYear;
 use crate::frontend::components::tag::Tags;
@@ -40,39 +37,30 @@ pub fn Posts() -> impl IntoView {
                 // TODO: In theroy serde should preserve order with json.
                 {move || {
                     featured_post
-                        .and_then(|posts| {
-                            let mut map = HashMap::<i32, Vec<Post>>::new();
-                            let filtered_posts: Vec<Post> = if !tags
-                                .get()
-                                .unwrap_or_default()
-                                .is_empty()
-                            {
-                                posts
-                                    .iter()
-                                    .filter(|post| {
-                                        tags.get()
-                                            .unwrap_or_default()
-                                            .iter()
-                                            .all(|tag| post.post_metadata.tags.contains(tag))
-                                    })
-                                    .cloned()
-                                    .collect()
-                            } else {
-                                posts.clone()
-                            };
-                            filtered_posts
-                                .iter()
-                                .for_each(|post| {
-                                    map.entry(post.post_metadata.publication_date.year())
-                                        .or_default()
-                                        .push(post.clone())
-                                });
+                        .and_then(|map| {
                             (2023..=OffsetDateTime::now_utc().year())
                                 .rev()
                                 .filter_map(|year| {
                                     map.get(&year)
                                         .map(|posts| {
-                                            let mut sorted_posts = posts.to_vec();
+                                            let mut sorted_posts = if !tags
+                                                .get()
+                                                .unwrap_or_default()
+                                                .is_empty()
+                                            {
+                                                posts
+                                                    .iter()
+                                                    .filter(|post| {
+                                                        tags.get()
+                                                            .unwrap_or_default()
+                                                            .iter()
+                                                            .all(|tag| post.post_metadata.tags.contains(tag))
+                                                    })
+                                                    .cloned()
+                                                    .collect()
+                                            } else {
+                                                posts.to_vec()
+                                            };
                                             sorted_posts
                                                 .sort_by_key(|post| post.post_metadata.publication_date);
                                             view! { <PostPreviewByYear year posts=sorted_posts/> }

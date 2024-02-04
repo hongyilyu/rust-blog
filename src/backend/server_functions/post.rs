@@ -1,10 +1,13 @@
+use std::collections::HashMap;
+
 use crate::common::post::{Post, PostType};
 use leptos::*;
 
 #[server(GetPosts, "/api")]
-pub async fn list_posts_metadata(post_type: PostType) -> Result<Vec<Post>, ServerFnError> {
+pub async fn list_posts_metadata(post_type: PostType) -> Result<HashMap<i32,Vec<Post>>, ServerFnError> {
     let path = post_type.get_file_path();
-    Ok(process_posts(path))
+    let posts = process_posts(path);
+    Ok(map_posts_to_year(posts))
 }
 
 #[server(GetYearPosts, "/api")]
@@ -127,5 +130,16 @@ fn process_posts(path: &str) -> Vec<Post> {
     sort_posts(&mut posts);
 
     posts
+}
+
+fn map_posts_to_year(posts: Vec<Post>) -> HashMap<i32, Vec<Post>> {
+    let mut map = HashMap::<i32, Vec<Post>>::new();
+    posts.iter().for_each(|post| {
+        map.entry(post.post_metadata.publication_date.year())
+            .or_default()
+            .push(post.clone())
+    });
+
+    map
 }
 }}

@@ -1,7 +1,8 @@
 use leptos::*;
+use time::OffsetDateTime;
 
 use crate::{
-    backend::server_functions::post::list_posts_metadata, common::post::PostType,
+    backend::server_functions::post::list_year_posts_metadata, common::post::PostType,
     frontend::components::featured_post::FeaturedPost,
 };
 
@@ -10,7 +11,7 @@ use crate::{
 pub fn About() -> impl IntoView {
     let featured_post = create_resource(
         || (),
-        |_| async { list_posts_metadata(PostType::Blog).await },
+        |_| async { list_year_posts_metadata(PostType::Blog, OffsetDateTime::now_utc().year()).await },
     );
     view! {
         <div class="mx-auto py-16 sm:py-24 lg:py-28">

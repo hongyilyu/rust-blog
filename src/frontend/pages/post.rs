@@ -3,7 +3,7 @@ use leptos_router::use_location;
 
 use crate::{
     backend::server_functions::post::list_posts_metadata,
-    common::post::PostType,
+    common::post::{Post, PostType},
     error_template::{AppError, ErrorTemplate},
     frontend::components::post_header::PostHeader,
 };
@@ -23,7 +23,10 @@ pub fn Post() -> impl IntoView {
                     featured_post
                         .and_then(|posts| {
                             let post = posts
-                                .iter()
+                                .values()
+                                .flat_map(|vec| vec.clone())
+                                .collect::<Vec<Post>>()
+                                .into_iter()
                                 .find(|post| {
                                     post.post_attribute.uri
                                         == use_location().pathname.get_untracked().as_str()
