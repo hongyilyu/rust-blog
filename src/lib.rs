@@ -26,6 +26,7 @@ pub fn App() -> impl IntoView {
                     <Route path="" view=About/>
                     <Route path="/posts" view=Posts/>
                     <Route path="/posts/:year" view=YearPosts/>
+                    <Route path="/open-source" view=move || view!{} />
                     <Route
                         path="/posts/:year/:post"
                         view=move || {
