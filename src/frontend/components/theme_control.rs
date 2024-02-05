@@ -1,6 +1,7 @@
 use leptos::*;
 use leptos_icons::*;
-use leptos_use::storage::{use_local_storage, StringCodec};
+use leptos_use::storage::use_local_storage;
+use leptos_use::utils::FromToStringCodec;
 
 use crate::frontend::components::buttons::icon_button::IconButton;
 
@@ -53,7 +54,7 @@ fn set_dark_theme() {
 // TODO: Why local storage not working.
 #[component]
 pub fn ThemeControl() -> impl IntoView {
-    let (theme, set_theme, _) = use_local_storage::<Theme, StringCodec>("theme");
+    let (theme, set_theme, _) = use_local_storage::<Theme, FromToStringCodec>("theme");
     create_effect(move |_| match theme.get() {
         Theme::Light => set_light_theme(),
         Theme::Dark => set_dark_theme(),

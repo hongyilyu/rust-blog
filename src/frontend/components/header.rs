@@ -15,9 +15,9 @@ pub fn Header() -> impl IntoView {
     view! {
         <header class="mx-auto flex max-w-3xl w-full flex-wrap items-center gap-1 px-2 pb-8 md:pt-12">
             <nav class="flex items-center gap-6" aria-label="Navigation">
-                <a href="/" class="rounded-full">
+                <A href="/" class="rounded-full">
                     <Logo/>
-                </a>
+                </A>
                 {nav_items
                     .into_iter()
                     .map(|item| view! { <A href=item.1>{item.0}</A> })

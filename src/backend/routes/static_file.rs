@@ -1,5 +1,5 @@
 cfg_if::cfg_if! { if #[cfg(feature = "ssr")] {
-use axum::{response::{IntoResponse, Response}, extract::Path, body::{self, Empty, Full}};
+use axum::{response::{IntoResponse, Response}, extract::Path, body::Body};
 use http::{StatusCode, header, HeaderValue};
 use include_dir::{include_dir, Dir};
 
@@ -13,7 +13,7 @@ pub async fn get_post_file(Path(file_path): Path<String>) -> impl IntoResponse {
     match POSTS_DIR.get_file(path) {
         None => Response::builder()
             .status(StatusCode::NOT_FOUND)
-            .body(body::boxed(Empty::new()))
+            .body(Body::empty())
             .unwrap(),
         Some(file) => Response::builder()
             .status(StatusCode::OK)
@@ -21,7 +21,7 @@ pub async fn get_post_file(Path(file_path): Path<String>) -> impl IntoResponse {
                 header::CONTENT_TYPE,
                 HeaderValue::from_str(mime_type.as_ref()).unwrap(),
             )
-            .body(body::boxed(Full::from(file.contents())))
+            .body(Body::from(file.contents()))
             .unwrap(),
     }
 }

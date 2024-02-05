@@ -13,7 +13,12 @@ pub fn get_parsed_content(content: &str, file_path: &Path) -> String {
 
     let parser = parser.map(|event| match event {
         Event::Start(tag) => match &tag {
-            Tag::Image(link_type, dest_url, title) => {
+            Tag::Image {
+                link_type,
+                dest_url,
+                title,
+                id,
+            } => {
                 let dst = if dest_url.starts_with("./") {
                     format!(
                         "/static/{}/{}",
@@ -29,7 +34,12 @@ pub fn get_parsed_content(content: &str, file_path: &Path) -> String {
                 } else {
                     dest_url.to_string()
                 };
-                Event::Start(Tag::Image(*link_type, dst.into(), title.clone()))
+                Event::Start(Tag::Image {
+                    link_type: *link_type,
+                    dest_url: dst.into(),
+                    title: title.clone(),
+                    id: id.clone(),
+                })
             }
             _ => Event::Start(tag),
         },
