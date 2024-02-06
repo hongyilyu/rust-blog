@@ -16,7 +16,7 @@ leptos_axum = { version = "0.6", optional = true }
 leptos_meta = { version = "0.6", features = ["nightly"] }
 leptos_router = { version = "0.6", features = ["nightly"] }
 leptos_icons = { version = "0.3"}
-leptos-use = { version = "0.10", features = ["ssr"] }
+leptos-use = { version = "0.10" }
 icondata = "0.3.0"
 
 log = "0.4"
@@ -54,6 +54,7 @@ ssr = [
     "leptos_meta/ssr",
     "leptos_router/ssr",
     "leptos-use/ssr",
+    "leptos-use/axum",
     "dep:tracing",
 ]
 
